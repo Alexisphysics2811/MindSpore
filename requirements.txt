@@ -1,0 +1,7 @@
+jupyter
+ipykernel
+notebook
+jupyterlab
+matplotlib
+numpy
+download
