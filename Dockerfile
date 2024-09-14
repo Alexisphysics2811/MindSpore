@@ -39,9 +39,15 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     python -m pip install -r requirements.txt
 
 # Install MindSpore from a specific wheel
+# Ascend MindSpore
 RUN pip install https://ms-release.obs.cn-north-4.myhuaweicloud.com/2.3.1/MindSpore/unified/x86_64/mindspore-2.3.1-cp39-cp39-linux_x86_64.whl \
     --trusted-host ms-release.obs.cn-north-4.myhuaweicloud.com \
     -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# CPU MindSpore
+# RUN pip install https://ms-release.obs.cn-north-4.myhuaweicloud.com/2.2.14/MindSpore/unified/x86_64/mindspore-2.2.14-cp39-cp39-linux_x86_64.whl \
+#    --trusted-host ms-release.obs.cn-north-4.myhuaweicloud.com \
+#    -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # Switch to the non-privileged user to run the application.
 USER appuser
