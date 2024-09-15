@@ -30,6 +30,11 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 
+RUN chown -R appuser /app
+
+# Add the library dependencies
+RUN apt-get update && apt-get install -y libgomp1 libpython3-dev build-essential wget curl
+
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
@@ -51,6 +56,15 @@ RUN pip install https://ms-release.obs.cn-north-4.myhuaweicloud.com/2.3.1/MindSp
 
 # Switch to the non-privileged user to run the application.
 USER appuser
+
+# Set environment variables for Ascend and CANN
+ENV ASCEND_HOME=/usr/local/Ascend
+ENV PATH=$ASCEND_HOME/driver/tools:$ASCEND_HOME/add-ons:$PATH
+ENV LD_LIBRARY_PATH=$ASCEND_HOME/driver/lib64:$LD_LIBRARY_PATH
+ENV PYTHONPATH=$ASCEND_HOME/pyACL/python/site-packages:$PYTHONPATH
+
+# Mount the Ascend folder from host
+VOLUME ["/usr/local/Ascend"]
 
 # Copy the source code into the container.
 COPY . .
